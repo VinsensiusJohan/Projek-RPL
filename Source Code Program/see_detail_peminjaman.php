@@ -2,9 +2,6 @@
 session_start();
 if (empty($_SESSION['username'])) {
     header("location:login.php?msg=need_login");
-} elseif ($_SESSION['username'] != 'admin') {
-    session_destroy();
-    header("location:login.php?msg=unauthorized_access");
 } elseif (isset($_GET["idpeminjaman"])) {
     $idpeminjaman = $_GET["idpeminjaman"];
     $judul = [];
@@ -21,7 +18,7 @@ FROM `peminjaman`
 	inner JOIN `pelanggan` ON `peminjaman`.`id_pelanggan` = `pelanggan`.`id_pelanggan`
 	, `buku` 
 	inner JOIN `detail_peminjaman` ON `detail_peminjaman`.`idnya_buku` = `buku`.`id_buku`
-    WHERE peminjaman.id_peminjaman = '$idpeminjaman';");
+    WHERE peminjaman.id_peminjaman = '$idpeminjaman'  AND detail_peminjaman.idnya_peminjaman = '$idpeminjaman';");
     $i = 0;
     $a = 0;
     while ($data = mysqli_fetch_array($query)) {
@@ -66,18 +63,36 @@ FROM `peminjaman`
                 </div>
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="pemilik.php">Halaman Utama</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="insert_buku.php">Tambah Buku</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="see_peminjaman.php">Riwayat Peminjaman</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="logout.php">Keluar</a>
-                        </li>
+                        <?php if ($_SESSION['username'] == 'admin') { ?>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="pemilik.php">Halaman Utama</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="insert_buku.php">Tambah Buku</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="see_peminjaman.php">Riwayat Peminjaman</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="logout.php">Keluar</a>
+                            </li>
+                        <?php } elseif ($_SESSION['username'] == 'penjaga') { ?>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="penjaga.php">Halaman Utama</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="see_pelanggan.php">Data Pelanggan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="insert_peminjaman.php">Buat Peminjaman</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="pengembalian.php">Pengembalian</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="logout.php">Keluar</a>
+                            </li>
+                        <?php } ?>
                 </div>
             </div>
         </div>

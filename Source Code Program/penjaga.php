@@ -2,8 +2,7 @@
 session_start();
 if (empty($_SESSION['username'])) {
     header("location:login.php?msg=need_login");
-}
-elseif ($_SESSION['username'] != 'penjaga') {
+} elseif ($_SESSION['username'] != 'penjaga') {
     session_destroy();
     header("location:login.php?msg=unauthorized_access");
 }
@@ -11,18 +10,97 @@ elseif ($_SESSION['username'] != 'penjaga') {
 ?>
 
 <html>
+
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Penjaga</title>
 </head>
+
 <body>
-    <button type="button" onclick="window.location.href='see_buku.php'">Lihat Buku</button>
-    <button type="button" onclick="window.location.href='see_peminjaman.php'">Lihat Peminjaman</button>
-    <button type="button" onclick="window.location.href='see_pelanggan.php'">Lihat Pelanggan</button>
-    <button type="button" onclick="window.location.href='insert_peminjaman.php'">Buat Peminjaman</button>
-    <button type="button" onclick="window.location.href='edit_peminjaman.php'">Pengembalian</button>
-    <button type="button" onclick="window.location.href='insert_pelanggan.php'">Input Pelanggan</button>
-    <button type="button" onclick="window.location.href='edit_delete_pelanggan.php'">Edit Pelanggan</button> 
-    <button type="button" onclick="window.location.href='logout.php'">Logout</button>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <nav class="navbar fixed-top navbar-dark" style="background-color: #0766ad;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="penjaga.php">Halaman Utama | <?php echo $_SESSION['username']; ?></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="background-color: #0766ad;">
+                <div class="offcanvas-header">
+                    <button type="button" class="btn-close btn btn-light" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="penjaga.php">Halaman Utama</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="see_pelanggan.php">Data Pelanggan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="insert_peminjaman.php">Buat Peminjaman</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="pengembalian.php">Pengembalian</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="logout.php">Keluar</a>
+                        </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br><br><br>
+    <button type="button" class="ms-3" onclick="window.history.back();">Kembali</button>
+    <br>
+    <div class="container-sm">
+        <div class="row">
+            <form action="" method="post">
+                <label for="">Cari Berdasarkan Judul</label>
+                <input type="text" name="cari">
+                <button class="btn btn-primary p-1" type="submit"> Cari </submit>
+            </form>
+
+        </div>
+    </div>
+    <div class="container-sm">
+        <table class="table">
+            <tr class="fw-bold">
+                <td>ID</td>
+                <td>Judul</td>
+                <td>Pengarang</td>
+                <td>Penerbit</td>
+                <td>ISBN</td>
+                <td>Jenis Buku</td>
+                <td>kondisi</td>
+                <td>Harga</td>
+                <td>Status</td>
+            </tr>
+            <?php
+            include "koneksi.php";
+            $carijudul = "";
+            if (isset($_POST['cari'])) {
+                $carijudul = $_POST['cari'];
+            }
+            $query = mysqli_query($connect, "Select * from buku where judul LIKE '%$carijudul%'");
+            while ($data = mysqli_fetch_array($query)) {
+            ?>
+                <tr>
+                    <td><?php echo $data['id_buku']; ?></td>
+                    <td><?php echo $data['judul']; ?></td>
+                    <td><?php echo $data['pengarang']; ?></td>
+                    <td><?php echo $data['penerbit']; ?></td>
+                    <td><?php echo $data['isbn']; ?></td>
+                    <td><?php echo $data['jenis_buku']; ?></td>
+                    <td><?php echo $data['kondisi_buku']; ?></td>
+                    <td><?php echo $data['harga_sewa']; ?></td>
+                    <td><?php echo $data['status']; ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+
+    </div>
+
+
 </body>
 
 </html>

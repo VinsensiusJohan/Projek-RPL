@@ -50,6 +50,16 @@ if (empty($_SESSION['username'])) {
     <button type="button" class="ms-3" onclick="window.history.back();">Kembali</button>
     <br>
     <div class="container-sm">
+        <div class="row">
+            <form action="" method="post">
+                <label for="">Cari Berdasarkan Judul</label>
+                <input type="text" name="cari">
+                <button class="btn btn-primary p-1" type="submit"> Cari </submit>
+            </form>
+
+        </div>
+    </div>
+    <div class="container-sm">
         <table class="table">
             <tr class="fw-bold">
                 <td>ID</td>
@@ -65,7 +75,11 @@ if (empty($_SESSION['username'])) {
             </tr>
             <?php
             include "koneksi.php";
-            $query = mysqli_query($connect, "Select * from buku");
+            $carinama = "";
+            if (isset($_POST['cari'])) {
+                $carinama = $_POST['cari'];
+            }
+            $query = mysqli_query($connect, "Select * from buku where judul LIKE '%$carinama%'");
             while ($data = mysqli_fetch_array($query)) {
             ?>
                 <tr>

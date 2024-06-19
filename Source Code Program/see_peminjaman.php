@@ -79,7 +79,7 @@ if (empty($_SESSION['username'])) {
             $query = mysqli_query($connect, "SELECT `peminjaman`.`id_peminjaman`, `pelanggan`.`nama`, `peminjaman`.`tgl_pinjam`, `peminjaman`.`biaya_total`, `peminjaman`.`status`
 FROM `peminjaman` 
 	INNER JOIN `pelanggan` ON `peminjaman`.`id_pelanggan` = `pelanggan`.`id_pelanggan`
-    WHERE pelanggan.nama LIKE '%$carinama%'");
+    WHERE pelanggan.nama LIKE '%$carinama%' ORDER BY peminjaman.status");
             while ($data = mysqli_fetch_array($query)) {
             ?>
                 <tr>
@@ -88,7 +88,7 @@ FROM `peminjaman`
                     <td><?php echo $data['tgl_pinjam']; ?></td>
                     <td><?php echo $data['biaya_total']; ?></td>
                     <td><?php echo $data['status']; ?></td>
-                    <td><a class="btn btn-primary p-1" href="see_detail_peminjaman.php?idpeminjaman=<?= $data["id_peminjaman"]; ?>">Detail</a>
+                    <td><a class="btn btn-info p-1" href="see_detail_peminjaman.php?idpeminjaman=<?= $data["id_peminjaman"]; ?>">Detail</a>
                     </td>
                 </tr>
             <?php }

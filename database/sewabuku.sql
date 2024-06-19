@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 18 Jun 2024 pada 13.28
+-- Waktu pembuatan: 19 Jun 2024 pada 12.11
 -- Versi server: 10.4.25-MariaDB
 -- Versi PHP: 8.1.10
 
@@ -60,7 +60,6 @@ INSERT INTO `buku` (`id_buku`, `judul`, `pengarang`, `penerbit`, `isbn`, `jenis_
 CREATE TABLE `detail_peminjaman` (
   `idnya_peminjaman` int(11) NOT NULL,
   `idnya_buku` int(11) NOT NULL,
-  `tgl_kembali` date NOT NULL DEFAULT current_timestamp(),
   `tenggat_pengembalian` date NOT NULL DEFAULT current_timestamp(),
   `status` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -69,9 +68,12 @@ CREATE TABLE `detail_peminjaman` (
 -- Dumping data untuk tabel `detail_peminjaman`
 --
 
-INSERT INTO `detail_peminjaman` (`idnya_peminjaman`, `idnya_buku`, `tgl_kembali`, `tenggat_pengembalian`, `status`) VALUES
-(2, 2, '2024-06-18', '2024-06-18', 'dikembalikan'),
-(2, 3, '2024-06-18', '2024-06-18', 'dikembalikan');
+INSERT INTO `detail_peminjaman` (`idnya_peminjaman`, `idnya_buku`, `tenggat_pengembalian`, `status`) VALUES
+(2, 2, '2024-06-18', 'selesai'),
+(2, 3, '2024-06-18', 'selesai'),
+(3, 3, '2024-06-26', 'selesai'),
+(3, 4, '2024-06-26', 'selesai'),
+(3, 5, '2024-06-26', 'selesai');
 
 -- --------------------------------------------------------
 
@@ -91,9 +93,10 @@ CREATE TABLE `pelanggan` (
 --
 
 INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `nomer_hp`, `alamat`) VALUES
-(1, 'penghuni mars', '7628348823', 'mars mars ganteng'),
-(7, 'kang tahu', '436463214', 'sok atuh'),
-(8, 'amanda123', '982348932', 'jabar utara');
+(1, 'Masha', '7628348823', 'Bantul'),
+(7, 'kang tahu', '436463214', 'Solo'),
+(8, 'amanda', '982348932', 'Jawa Barat'),
+(9, 'Teteh', '083312437768', 'Babarsari');
 
 -- --------------------------------------------------------
 
@@ -114,7 +117,8 @@ CREATE TABLE `peminjaman` (
 --
 
 INSERT INTO `peminjaman` (`id_peminjaman`, `id_pelanggan`, `tgl_pinjam`, `biaya_total`, `status`) VALUES
-(2, 1, '2024-06-05', 7, 'selesai');
+(2, 1, '2024-06-05', 3000, 'selesai'),
+(3, 1, '2024-06-19', 4500, 'selesai');
 
 --
 -- Indexes for dumped tables
@@ -160,7 +164,13 @@ ALTER TABLE `buku`
 -- AUTO_INCREMENT untuk tabel `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT untuk tabel `peminjaman`
+--
+ALTER TABLE `peminjaman`
+  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
